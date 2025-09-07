@@ -6,6 +6,7 @@ import { sendEmail } from "../mail";
 
 const EMAIL_JWT_SECRET = process.env.EMAIL_JWT_SECRET as string;
 const AUTH_JWT_SECRET = process.env.AUTH_JWT_SECRET as string;
+const FRONTEND_URL = process.env.FRONTEND_URL as string;
 const router: Router = Router();
 
 router.post("/signup", async (req, res) => {
@@ -100,6 +101,7 @@ router.post("/signin/post", (req, res) => {
       AUTH_JWT_SECRET
     );
     res.cookie("token", authToken);
+    res.redirect(FRONTEND_URL)
     res.json({
       message: "Cookie set succesfully",
     });
