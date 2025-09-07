@@ -92,6 +92,7 @@ router.post("/signin/post", (req, res) => {
 
   if (!token) {
     res.status(400).json({ message: "Token missing" });
+    return
   }
 
   try {
