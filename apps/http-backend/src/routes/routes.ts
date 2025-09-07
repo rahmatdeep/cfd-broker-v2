@@ -90,7 +90,9 @@ router.post("/signin", async (req, res) => {
 router.post("/signin/post", (req, res) => {
   const token = req.query.token as string;
 
-  if (!token) return;
+  if (!token) {
+    res.status(400).json({ message: "Token missing" });
+  }
 
   try {
     const { email } = jwt.verify(token, EMAIL_JWT_SECRET) as JwtPayload;
@@ -101,10 +103,15 @@ router.post("/signin/post", (req, res) => {
       AUTH_JWT_SECRET
     );
     res.cookie("token", authToken);
-    res.redirect(FRONTEND_URL)
-    res.json({
-      message: "Cookie set succesfully",
-    });
+    if (process.env.NODE_ENV == "production") {
+      res.redirect(FRONTEND_URL);
+      return;
+    } else {
+      res.json({
+        message: "Cookie set succesfully",
+      });
+      return;
+    }
   } catch (e) {
     res.status(500).json({ message: "Internal Server Error" });
     console.log(e);
